@@ -1,0 +1,21 @@
+SQL> --테이블 데이터베이스 만들기
+SQL> create tablespace javadb
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\javadb.dbf'
+  3  size 2M;
+
+Tablespace created.
+
+SQL> --유저 생성하기
+SQL> create user java2
+  2  identified by 1234
+  3  default tablespace javadb
+  4  quota unlimited on javadb;
+
+User created.
+
+SQL> --권한 부여하기
+SQL> grant create session, create table to java2;
+
+Grant succeeded.
+
+SQL> spool off;
