@@ -344,8 +344,7 @@ SQL> select * from emp where deptno in(select deptno from emp where sal=3000);
 
     7902 80/12/17        800                    20                                                                                                                                                                                                     
 
-
-                                                                                                                            *
+--1
 
 SQL> select ENAME, SAL, DEPTNO from emp where sal>(select min(sal) from emp where deptno = (select deptno from emp where ename = 'MILLER'));
 
@@ -362,7 +361,8 @@ FORD                       3000         20
 
 8 rows selected.
 
-SQL> --2
+--2
+
 SQL> select ename,sal from emp where sal > (select max(sal) from emp where ename like '%E%');
 
 ENAME                       SAL                                                                                                                                                                                                                                                                             
@@ -371,7 +371,7 @@ SCOTT                      3000
 KING                       5000                                                                                                                                                                                                                                                                             
 FORD                       3000                                                                                                                                                                                                                                                                             
 
-
+--3
 SQL> select ename, sal, hiredate from emp where sal < (select sal from emp where hiredate = (select max(hiredate) from emp where deptno=10)) order by hiredate asc;
 
 ENAME                       SAL HIREDATE                                                                                                                                                                                                                                                                    
@@ -383,4 +383,103 @@ JAMES                       950 81/12/03
 ADAMS                      1100 87/05/23                                                                                                                                                                                                                                                                    
 
 
---4                                                                                                                                                                                                                                                                
+--4         
+
+--5 
+SQL> select job, sal from emp where hiredate>(select hiredate from emp where ename ='SMITH');
+
+JOB                       SAL
+------------------ ----------
+SALESMAN                 1600
+SALESMAN                 1250
+MANAGER                  2975
+SALESMAN                 1250
+MANAGER                  2850
+MANAGER                  2450
+ANALYST                  3000
+PRESIDENT                5000
+SALESMAN                 1500
+CLERK                    1100
+CLERK                     950
+
+JOB                       SAL
+------------------ ----------
+ANALYST                  3000
+CLERK                    1300
+
+13 rows selected.
+
+--6
+
+SQL> select ename,sal from emp where sal> (select max(sal) from emp where deptno=30);
+
+ENAME                       SAL
+-------------------- ----------
+JONES                      2975
+SCOTT                      3000
+KING                       5000
+FORD                       3000
+
+--7
+ select ename,dname,sal from emp,dept where emp.deptno=dept.deptno and hiredate < (select hiredate from emp where comm =(select max(comm)from emp));
+
+ENAME                DNAME                               SAL
+-------------------- ---------------------------- ----------
+SMITH                RESEARCH                            800
+ALLEN                SALES                              1600
+WARD                 SALES                              1250
+JONES                RESEARCH                           2975
+BLAKE                SALES                              2850
+CLARK                ACCOUNTING                         2450
+TURNER               SALES                              1500
+
+7 rows selected.                    
+
+--8
+select ename,hiredate from emp where sal = (select max(sal) from emp where job='SALESMAN');
+
+ENAME                HIREDATE
+-------------------- --------
+ALLEN                81/02/20
+
+--9
+select hiredate from emp where hiredate> (select hiredate from emp where sal =(select max(sal) from emp where job = (select job from emp where ename='WARD')));
+
+HIREDATE
+--------
+81/02/22
+81/04/02
+81/09/28
+81/05/01
+81/06/09
+87/04/19
+81/11/17
+81/09/08
+87/05/23
+81/12/03
+81/12/03
+
+HIREDATE
+--------
+82/01/23
+
+12 rows selected.                                                                                                                                                                                                                                   -
+--10
+select ename, hiredate from emp where hiredate = (select min(hiredate) from emp where comm is null);
+
+ENAME                HIREDATE
+-------------------- --------
+SMITH                80/12/17
+
+--11
+
+SQL> select ename, hiredate from emp where sal between 2000 and 4000 and deptno = (select deptno from emp where ename='SCOTT');
+
+ENAME                HIREDATE
+-------------------- --------
+JONES                81/04/02
+SCOTT                87/04/19
+FORD                 81/12/03
+
+
+--12

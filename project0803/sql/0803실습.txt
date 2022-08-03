@@ -1,0 +1,311 @@
+SQL> --3¹ø ´ä
+SQL> select ename, sal, hiredate from emp where < sql (
+  2  select sal ;
+select ename, sal, hiredate from emp where < sql (
+                                           *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> select ename, sal, hiredate from emp where < sal (
+  2  select sal from emp where hiredate = (
+  3  select max(hiredate) from emp where deptno));
+select ename, sal, hiredate from emp where < sal (
+                                           *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> select ename, sal, hiredate from emp where sal < (
+  2  select sal from emp where hiredate = (
+  3  select max(hiredate) from emp where deptno));
+select max(hiredate) from emp where deptno))
+                                          *
+ERROR at line 3:
+ORA-00920: invalid relational operator 
+
+
+SQL> select ename, sal, hiredate from emp where sal < (
+  2  select sal from emp where hiredate = (
+  3  select max(hiredate) from emp where deptno));
+select max(hiredate) from emp where deptno))
+                                          *
+ERROR at line 3:
+ORA-00920: invalid relational operator 
+
+
+SQL> select ename, sal, hiredate from emp where sal < (
+  2  select sal from emp where hiredate = (
+  3  select max(hiredate) from emp where deptno = 10));
+
+ENAME                       SAL HIREDATE                                        
+-------------------- ---------- --------                                        
+SMITH                       800 80/12/17                                        
+WARD                       1250 81/02/22                                        
+MARTIN                     1250 81/09/28                                        
+ADAMS                      1100 87/05/23                                        
+JAMES                       950 81/12/03                                        
+
+SQL> select * from emp;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7369 SMITH                CLERK                    7902 80/12/17          
+       800                    20                                                
+                                                                                
+      7499 ALLEN                SALESMAN                 7698 81/02/20          
+      1600        300         30                                                
+                                                                                
+      7521 WARD                 SALESMAN                 7698 81/02/22          
+      1250        500         30                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7566 JONES                MANAGER                  7839 81/04/02          
+      2975                    20                                                
+                                                                                
+      7654 MARTIN               SALESMAN                 7698 81/09/28          
+      1250       1400         30                                                
+                                                                                
+      7698 BLAKE                MANAGER                  7839 81/05/01          
+      2850                    30                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7782 CLARK                MANAGER                  7839 81/06/09          
+      2450                    10                                                
+                                                                                
+      7788 SCOTT                ANALYST                  7566 87/04/19          
+      3000                    20                                                
+                                                                                
+      7839 KING                 PRESIDENT                     81/11/17          
+      5000                    10                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7844 TURNER               SALESMAN                 7698 81/09/08          
+      1500          0         30                                                
+                                                                                
+      7876 ADAMS                CLERK                    7788 87/05/23          
+      1100                    20                                                
+                                                                                
+      7900 JAMES                CLERK                    7698 81/12/03          
+       950                    30                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7902 FORD                 ANALYST                  7566 81/12/03          
+      3000                    20                                                
+                                                                                
+      7934 MILLER               CLERK                    7782 82/01/23          
+      1300                    10                                                
+                                                                                
+
+14 rows selected.
+
+SQL> set line 300;
+SQL> select * from emp;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO                                                                                                                                                                                                     
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------                                                                                                                                                                                                     
+      7369 SMITH                CLERK                    7902 80/12/17        800                    20                                                                                                                                                                                                     
+      7499 ALLEN                SALESMAN                 7698 81/02/20       1600        300         30                                                                                                                                                                                                     
+      7521 WARD                 SALESMAN                 7698 81/02/22       1250        500         30                                                                                                                                                                                                     
+      7566 JONES                MANAGER                  7839 81/04/02       2975                    20                                                                                                                                                                                                     
+      7654 MARTIN               SALESMAN                 7698 81/09/28       1250       1400         30                                                                                                                                                                                                     
+      7698 BLAKE                MANAGER                  7839 81/05/01       2850                    30                                                                                                                                                                                                     
+      7782 CLARK                MANAGER                  7839 81/06/09       2450                    10                                                                                                                                                                                                     
+      7788 SCOTT                ANALYST                  7566 87/04/19       3000                    20                                                                                                                                                                                                     
+      7839 KING                 PRESIDENT                     81/11/17       5000                    10                                                                                                                                                                                                     
+      7844 TURNER               SALESMAN                 7698 81/09/08       1500          0         30                                                                                                                                                                                                     
+      7876 ADAMS                CLERK                    7788 87/05/23       1100                    20                                                                                                                                                                                                     
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO                                                                                                                                                                                                     
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------                                                                                                                                                                                                     
+      7900 JAMES                CLERK                    7698 81/12/03        950                    30                                                                                                                                                                                                     
+      7902 FORD                 ANALYST                  7566 81/12/03       3000                    20                                                                                                                                                                                                     
+      7934 MILLER               CLERK                    7782 82/01/23       1300                    10                                                                                                                                                                                                     
+
+14 rows selected.
+
+SQL> set pagesize 20
+SQL> /
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO                                                                                                                                                                                                     
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------                                                                                                                                                                                                     
+      7369 SMITH                CLERK                    7902 80/12/17        800                    20                                                                                                                                                                                                     
+      7499 ALLEN                SALESMAN                 7698 81/02/20       1600        300         30                                                                                                                                                                                                     
+      7521 WARD                 SALESMAN                 7698 81/02/22       1250        500         30                                                                                                                                                                                                     
+      7566 JONES                MANAGER                  7839 81/04/02       2975                    20                                                                                                                                                                                                     
+      7654 MARTIN               SALESMAN                 7698 81/09/28       1250       1400         30                                                                                                                                                                                                     
+      7698 BLAKE                MANAGER                  7839 81/05/01       2850                    30                                                                                                                                                                                                     
+      7782 CLARK                MANAGER                  7839 81/06/09       2450                    10                                                                                                                                                                                                     
+      7788 SCOTT                ANALYST                  7566 87/04/19       3000                    20                                                                                                                                                                                                     
+      7839 KING                 PRESIDENT                     81/11/17       5000                    10                                                                                                                                                                                                     
+      7844 TURNER               SALESMAN                 7698 81/09/08       1500          0         30                                                                                                                                                                                                     
+      7876 ADAMS                CLERK                    7788 87/05/23       1100                    20                                                                                                                                                                                                     
+      7900 JAMES                CLERK                    7698 81/12/03        950                    30                                                                                                                                                                                                     
+      7902 FORD                 ANALYST                  7566 81/12/03       3000                    20                                                                                                                                                                                                     
+      7934 MILLER               CLERK                    7782 82/01/23       1300                    10                                                                                                                                                                                                     
+
+14 rows selected.
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select * from emp
+  2* group by deptno
+SQL> 
+SQL> /
+select * from emp
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select deptno from emp
+  2* group by deptno
+SQL> /
+
+    DEPTNO                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+        30                                                                                                                                                                                                                                                                                                  
+        20                                                                                                                                                                                                                                                                                                  
+        10                                                                                                                                                                                                                                                                                                  
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select count(deptno) from emp
+  2* group by deptno
+SQL> /
+
+COUNT(DEPTNO)                                                                                                                                                                                                                                                                                               
+-------------                                                                                                                                                                                                                                                                                               
+            6                                                                                                                                                                                                                                                                                               
+            5                                                                                                                                                                                                                                                                                               
+            3                                                                                                                                                                                                                                                                                               
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select count(*),deptno from emp
+  2* group by deptno
+SQL> /
+
+  COUNT(*)     DEPTNO                                                                                                                                                                                                                                                                                       
+---------- ----------                                                                                                                                                                                                                                                                                       
+         6         30                                                                                                                                                                                                                                                                                       
+         5         20                                                                                                                                                                                                                                                                                       
+         3         10                                                                                                                                                                                                                                                                                       
+
+SQL> select deptno, max(count(*)) from emp group by deptno
+  2  ;
+select deptno, max(count(*)) from emp group by deptno
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select max(cnt) from (
+  2  select count(*) as cnt, deptno from emp
+  3* 	group by deptno)
+SQL> /
+
+  MAX(CNT)                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+         6                                                                                                                                                                                                                                                                                                  
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select deptno, max(cnt) from (
+  2  select count(*) as cnt, deptno from emp
+  3* 	group by deptno)
+SQL> /
+select deptno, max(cnt) from (
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select deptno, max(cnt) from (
+  2  select max(count(*)), deptno from emp
+  3  	group by deptno
+  4* )
+SQL> /
+select deptno, max(cnt) from (
+                   *
+ERROR at line 1:
+ORA-00904: "CNT": invalid identifier 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select  max(cnt) from (
+  2  select max(count(*)), deptno from emp
+  3  	group by deptno
+  4* )
+SQL> /
+select  max(cnt) from (
+            *
+ERROR at line 1:
+ORA-00904: "CNT": invalid identifier 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  select  max(cnt) from (
+  2  select count(*)as cnt, deptno from emp
+  3  	group by deptno
+  4* )
+SQL> /
+
+  MAX(CNT)                                                                                                                                                                                                                                                                                                  
+----------                                                                                                                                                                                                                                                                                                  
+         6                                                                                                                                                                                                                                                                                                  
+
+SQL> create view emp_view
+  2  as
+  3  select ename,sal from emp;
+create view emp_view
+            *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> create view emp_view
+  2  as
+  3  select ename,sal from emp;
+create view emp_view
+            *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> exit
