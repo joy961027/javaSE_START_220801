@@ -1,0 +1,262 @@
+SQL> --member 테이블에 사용할 시퀀스 만들기
+SQL> --아마 유저를 만들면서 시퀀스에 대한 권한을 안주었을 것이다.
+SQL> create sequence seq_member
+  2  increment by 1
+  3  start with 1;
+create sequence seq_member
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> -- 시스템 계정으로 접속 전환하기
+SQL> conn system/1234
+Connected.
+SQL> --유저 확인
+SQL> show user;
+USER is "SYSTEM"
+SQL> --유저 정보 바꾸기
+SQL> grant create sequence to java;
+
+Grant succeeded.
+
+SQL> -- 다시 일반 유저로 접속
+SQL> conn java/1234
+Connected.
+SQL> create sequence seq_member
+  2  increment by 1
+  3  start with 1;
+
+Sequence created.
+
+SQL> --테이블 변경(컬럼 사이즈 변경)
+SQL> alter table member modify gender varchar(6);
+
+Table altered.
+
+SQL> --회원 조회
+SQL> set line 300
+SQL> select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                               
+         3 abc1                                     123456789                test1                                    temp                                                         010    1234     5678     888888       1111111        남           22/08/04                                               
+
+SQL> select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                               
+         3 abc1                                     123456789                test1                                    temp                                                         010    1234     5678     888888       1111111        남           22/08/04                                               
+         4 d                                        d                        d                                        temp                                                         010    2        2        2            2              남           22/08/04                                               
+         5 2323                                     d                        d                                        temp                                                         010    2        2        2            2              남           22/08/04                                               
+         6 lemoncoat                                123456789                test2                                    test2@test2                                                  010    1234     4567     123456       1235467        남           22/08/04                                               
+
+SQL> --sql플러스 를 자체 명령어
+SQL> --라인 컬럼 크기 조정
+SQL> set line 400
+SQL> select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                                                                                                                    
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                                                                                                                                   
+         3 abc1                                     123456789                test1                                    temp                                                         010    1234     5678     888888       1111111        남           22/08/04                                                                                                                                                   
+         4 d                                        d                        d                                        temp                                                         010    2        2        2            2              남           22/08/04                                                                                                                                                   
+         5 2323                                     d                        d                                        temp                                                         010    2        2        2            2              남           22/08/04                                                                                                                                                   
+         6 lemoncoat                                123456789                test2                                    test2@test2                                                  010    1234     4567     123456       1235467        남           22/08/04                                                                                                                                                   
+
+SQL> select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                                                                                                                    
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                                                                                                                                   
+         3 abc1                                     123456789                test1                                    temp                                                         010    1234     5678     888888       1111111        남           22/08/04                                                                                                                                                   
+         4 d                                        d                        d                                        temp                                                         010    2        2        2            2              남           22/08/04                                                                                                                                                   
+         5 2323                                     d                        d                                        temp                                                         010    2        2        2            2              남           22/08/04                                                                                                                                                   
+         6 lemoncoat                                123456789                test2                                    test2@test2                                                  010    1234     4567     123456       1235467        남           22/08/04                                                                                                                                                   
+
+SQL> --hobby sequence 만들기
+SQL> create sequence seq_hobby
+  2  increment by 1
+  3  start with 1;
+
+Sequence created.
+
+SQL> -- 시퀀스 객체 는 여러 메서드를 지원하는데 , 이때 .nextval현재값에서 증가된 값을 반환 한다면
+SQL> --current val 은 현재 세션에서 가장 마지막에 일으킨 시퀀스 값을 가져온다.
+SQL> -- 이때 동시 사용자에 의해 일으킨 시퀀스 값이 아니다. 각 사용자는 자기 자신이
+SQL> --증가시킨 시퀀스 값을 반환받는다.
+SQL> select seq_member.currvval from dept;
+select seq_member.currvval from dept
+       *
+ERROR at line 1:
+ORA-00904: "SEQ_MEMBER"."CURRVVAL": invalid identifier 
+
+
+SQL> insert into member(member_id) values(seq_member.nextval);
+
+1 row created.
+
+SQL> --최종적으로 내가 일으킨 시퀀스 얻기
+SQL> select seq_member.currval from dept;
+
+   CURRVAL                                                                                                                                                                                                                                                                                                                                                                                                      
+----------                                                                                                                                                                                                                                                                                                                                                                                                      
+         7                                                                                                                                                                                                                                                                                                                                                                                                      
+         7                                                                                                                                                                                                                                                                                                                                                                                                      
+         7                                                                                                                                                                                                                                                                                                                                                                                                      
+         7                                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> select seq_member.currval from dual;
+
+   CURRVAL                                                                                                                                                                                                                                                                                                                                                                                                      
+----------                                                                                                                                                                                                                                                                                                                                                                                                      
+         7                                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> --시퀀스 조회시 from 절에 작성할 테이블에 레코드가 1건이어야하느데,
+SQL> --만약 이러한 테이블이 없으면 우리가 만들어어야함.
+SQL> --오라클에서 이미 우리대신 컬럼과 레코드가 달랑 한개인 dummy테이블을 지원한다.
+SQL> select * from dual;
+
+DU                                                                                                                                                                                                                                                                                                                                                                                                              
+--                                                                                                                                                                                                                                                                                                                                                                                                              
+X                                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> delete from member;
+
+13 rows deleted.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> desc hobby;
+ Name                                                                                                                                                                                                                                      Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------------------------------------------------------------------
+ HOBBY_ID                                                                                                                                                                                                                                  NOT NULL NUMBER
+ MEMBER_ID                                                                                                                                                                                                                                          NUMBER
+ HOBBY_NAME                                                                                                                                                                                                                                         VARCHAR2(20)
+
+SQL> select seq_member.currval as member_id from dual
+  2  ;
+
+ MEMBER_ID                                                                                                                                                                                                                                                                                                                                                                                                      
+----------                                                                                                                                                                                                                                                                                                                                                                                                      
+         7                                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> select seq_member.currval from dual
+  2  ;
+
+   CURRVAL                                                                                                                                                                                                                                                                                                                                                                                                      
+----------                                                                                                                                                                                                                                                                                                                                                                                                      
+         7                                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> Select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                                                                                                                    
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                                                                                                                                   
+        18 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        19 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        24 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        25 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        29 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        26 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        20 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        21 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        27 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        30 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        22 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                                                                                                                    
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                                                                                                                                   
+        23 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        28 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        16 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+        17 lemon                                    1234                     김성수                                   cjcj@gmail.com                                               010    1234     4567     961027       1111111        남           22/08/04                                                                                                                                                   
+
+15 rows selected.
+
+SQL> delete from member;
+
+15 rows deleted.
+
+SQL> Select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                                                                                                                    
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                                                                                                                                   
+        31 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04                                                                                                                                                   
+
+SQL> select * from hobby;
+
+no rows selected
+
+SQL> select * from hobby;
+
+no rows selected
+
+SQL> select * from hobby;
+
+  HOBBY_ID  MEMBER_ID HOBBY_NAME                                                                                                                                                                                                                                                                                                                                                                                
+---------- ---------- ----------------------------------------                                                                                                                                                                                                                                                                                                                                                  
+         1         32 on                                                                                                                                                                                                                                                                                                                                                                                        
+         2         32 on                                                                                                                                                                                                                                                                                                                                                                                        
+
+SQL> Select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                                                                                                                    
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                                                                                                                                   
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04                                                                                                                                                   
+        31 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04                                                                                                                                                   
+
+SQL> Select * from member;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE                                                                                                                                                    
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ --------                                                                                                                                                   
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04                                                                                                                                                   
+        31 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04                                                                                                                                                   
+
+SQL> select * from hobby;
+
+  HOBBY_ID  MEMBER_ID HOBBY_NAME                                                                                                                                                                                                                                                                                                                                                                                
+---------- ---------- ----------------------------------------                                                                                                                                                                                                                                                                                                                                                  
+         1         32 on                                                                                                                                                                                                                                                                                                                                                                                        
+         2         32 on                                                                                                                                                                                                                                                                                                                                                                                        
+
+SQL> --원래는 member와 hobby테이블은 하나였다. 물리적으로 분리시킨 이유는
+SQL> --데이터의 무결성 때문에 나누었다. 하지만 물리적으로 나누어진 테이블은
+SQL> --합쳐서 보여주기 쉽지않다. 이때 사용되는 쿼리가 바로 즉 정규화에 의해
+SQL> --찢어진 테이블을 마치 하나처럼 보여주는 쿼리를 가리켜 조인이라고 한다.
+SQL> select * from member,hobby
+  2  where member.member_id=hobby.member_id;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE    HOBBY_ID  MEMBER_ID HOBBY_NAME                                                                                                                  
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ -------- ---------- ---------- ----------------------------------------                                                                                    
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04          1         32 on                                                                                                                          
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04          2         32 on                                                                                                                          
+
+SQL> where member.member_id=hobby.member_id;
+SP2-0734: unknown command beginning "where memb..." - rest of line ignored.
+SQL> select * from member,hobby
+  2  where member.member_id=hobby.member_id;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE    HOBBY_ID  MEMBER_ID HOBBY_NAME                                                                                                                  
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ -------- ---------- ---------- ----------------------------------------                                                                                    
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04          1         32 on                                                                                                                          
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04          2         32 on                                                                                                                          
+        33 joy961027                                1234                     김건모                                   vvonc@naver.com                                              010    2222     4444     123132       4564654        여           22/08/04          3         33 on                                                                                                                          
+        33 joy961027                                1234                     김건모                                   vvonc@naver.com                                              010    2222     4444     123132       4564654        여           22/08/04          4         33 on                                                                                                                          
+
+SQL> where member.member_id=hobby.member_id;
+SP2-0734: unknown command beginning "where memb..." - rest of line ignored.
+SQL> select * from member,hobby
+  2  where member.member_id=hobby.member_id;
+
+ MEMBER_ID USER_ID                                  PASS                     USER_NAME                                EMAIL                                                        TEL1   TEL2     TEL3     SOCIAL1      SOCIAL2        GENDER       REGDATE    HOBBY_ID  MEMBER_ID HOBBY_NAME                                                                                                                  
+---------- ---------------------------------------- ------------------------ ---------------------------------------- ------------------------------------------------------------ ------ -------- -------- ------------ -------------- ------------ -------- ---------- ---------- ----------------------------------------                                                                                    
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04          1         32 on                                                                                                                          
+        32 lemon                                    123456789                김성수                                   joy961027@naver.com                                          010    7377     0476     961027       1111111        남           22/08/04          2         32 on                                                                                                                          
+        34 joy961027                                123                      ddd                                      ddd@0                                                        010    4564     5456     212344       1321324        남           22/08/04          5         34 독서                                                                                                                        
+        34 joy961027                                123                      ddd                                      ddd@0                                                        010    4564     5456     212344       1321324        남           22/08/04          6         34 영화                                                                                                                        
+        33 joy961027                                1234                     김건모                                   vvonc@naver.com                                              010    2222     4444     123132       4564654        여           22/08/04          3         33 on                                                                                                                          
+        33 joy961027                                1234                     김건모                                   vvonc@naver.com                                              010    2222     4444     123132       4564654        여           22/08/04          4         33 on                                                                                                                          
+
+6 rows selected.
+
+SQL> spool off
