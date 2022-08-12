@@ -1,4 +1,4 @@
-package com.aca.project0811.thread;
+package com.aca.js.thread;
 
 //별을 출력하는 쓰레드 정의
 public class Star extends Thread {

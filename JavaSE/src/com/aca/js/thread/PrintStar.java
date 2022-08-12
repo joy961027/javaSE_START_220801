@@ -1,4 +1,4 @@
-package com.aca.project0811.thread;
+package com.aca.js.thread;
 /*
  쓰레드란? 하나의 <프로세스>내에서 <독립적>으로 수행 될 수 잇는 세부실행 단위
  우리가 사용하는 OS가 여러 프로세스들을 시분할하여 마치 동시에 실행되는 것처럼 효과를 내듯,
